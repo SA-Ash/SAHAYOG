@@ -8,7 +8,9 @@ from app.core.db import SessionLocal
 from app.models.entities import User
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Local demo-only authenticator helper; never expose via HTTP")
+    parser = argparse.ArgumentParser(
+        description="Local demo-only authenticator helper; never expose via HTTP"
+    )
     parser.add_argument("--email", default="supervisor@sahyog.demo")
     parser.add_argument("--provision", action="store_true")
     args = parser.parse_args()
@@ -18,4 +20,10 @@ if __name__ == "__main__":
         user = db.scalar(select(User).where(User.email == args.email))
         if not user or not user.totp_secret:
             parser.error("Demo user not found or TOTP not configured")
-        print(pyotp.TOTP(user.totp_secret).provisioning_uri(user.email, issuer_name="SAHYOG Intelligence") if args.provision else pyotp.TOTP(user.totp_secret).now())
+        print(
+            pyotp.TOTP(user.totp_secret).provisioning_uri(
+                user.email, issuer_name="SAHYOG Intelligence"
+            )
+            if args.provision
+            else pyotp.TOTP(user.totp_secret).now()
+        )

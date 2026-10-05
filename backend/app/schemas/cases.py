@@ -80,6 +80,7 @@ class CaseOut(BaseModel):
     title: str
     status: str
     gang_case_id: uuid.UUID | None
+    scenario_id: uuid.UUID | None
     created_by: uuid.UUID
     created_at: datetime
     source: str

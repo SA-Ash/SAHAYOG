@@ -1,0 +1,78 @@
+{
+  "synthetic_attribution": {
+    "training_samples": 10,
+    "heldout": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "ece": 0.09999999999999998,
+      "bins": [
+        {
+          "from": 0.9,
+          "count": 10,
+          "confidence": 0.9,
+          "accuracy": 1
+        }
+      ],
+      "samples": 10
+    },
+    "calibrated_heldout": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "ece": 0.0,
+      "bins": [
+        {
+          "from": 0.9,
+          "count": 10,
+          "confidence": 1.0,
+          "accuracy": 1
+        }
+      ],
+      "samples": 10
+    },
+    "bootstrap_95_ci": {
+      "precision": [
+        1.0,
+        1.0
+      ],
+      "recall": [
+        1.0,
+        1.0
+      ],
+      "f1": [
+        1.0,
+        1.0
+      ],
+      "ece": [
+        0.0,
+        0.0
+      ]
+    },
+    "calibration": [
+      {
+        "from": 0.9,
+        "to": 0.9,
+        "probability": 1.0,
+        "count": 10
+      }
+    ],
+    "seed": 42
+  },
+  "queue": {
+    "cases": 1000,
+    "failures": 0,
+    "backend": "local durable job executor, sequential consumer",
+    "fixture": "same one-hop synthetic scenario across independent cases",
+    "seconds": 13.611966128999995,
+    "throughput_per_second": 73.46477287138718,
+    "p95_trace_seconds": 0.015107266999962121,
+    "average_trace_seconds": 0.013611542066998992
+  },
+  "public_dataset": {
+    "addresses": 39,
+    "snapshot": "2022-11-10",
+    "source": "https://www.binance.com/en-IN/blog/community/2895840147147652626",
+    "behavioural_evaluation": "NOT_RUN: requires independent explorer observations and held-out labels; historical wallet list is not live accuracy evidence"
+  }
+}

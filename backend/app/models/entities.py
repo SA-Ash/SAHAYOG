@@ -3,7 +3,18 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import JSON, Boolean, CheckConstraint, DateTime, ForeignKey, Integer, Numeric, String, UniqueConstraint, Uuid
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    UniqueConstraint,
+    Uuid,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.types import TypeDecorator
 
@@ -38,8 +49,32 @@ class Base(DeclarativeBase):
     pass
 
 
+class UTCDateTime(TypeDecorator):
+    """Keep UTC-aware timestamps when SQLite drops timezone information."""
+
+    impl = DateTime(timezone=True)
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if value.utcoffset() is None:
+            raise ValueError("Timestamp must include a timezone")
+        return value.astimezone(timezone.utc)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        return (
+            value.replace(tzinfo=timezone.utc)
+            if value.utcoffset() is None
+            else value.astimezone(timezone.utc)
+        )
+
+
 class BaseUnits(TypeDecorator):
     """Postgres NUMERIC(38,0); text on SQLite to avoid SQLite float coercion."""
+
     impl = Numeric(38, 0)
     cache_ok = True
 
@@ -73,17 +108,25 @@ class User(Base):
 
 class Case(Base):
     __tablename__ = "cases"
-    __table_args__ = (CheckConstraint("status IN ('OPEN','TRACING','ATTRIBUTED','FREEZE_PENDING','CLOSED')"),)
+    __table_args__ = (
+        CheckConstraint("status IN ('OPEN','TRACING','ATTRIBUTED','FREEZE_PENDING','CLOSED')"),
+    )
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     case_ref: Mapped[str] = mapped_column(String(40), unique=True, index=True)
     sahyog_ref: Mapped[str | None] = mapped_column(String(80), unique=True)
     title: Mapped[str] = mapped_column(String(160))
     status: Mapped[str] = mapped_column(String(20), default="OPEN", index=True)
     gang_case_id: Mapped[uuid.UUID | None] = mapped_column(Uuid)
+    scenario_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("scenarios.id"))
     created_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now, index=True)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=now, index=True)
     source: Mapped[str] = mapped_column(String(20), default="manual")
-    transactions: Mapped[list["VictimTransaction"]] = relationship(back_populates="case", cascade="all, delete-orphan", lazy="selectin", order_by="VictimTransaction.created_at")
+    transactions: Mapped[list["VictimTransaction"]] = relationship(
+        back_populates="case",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        order_by="VictimTransaction.created_at",
+    )
     attachments: Mapped[list["CaseAttachment"]] = relationship(lazy="selectin")
 
 
@@ -104,9 +147,9 @@ class VictimTransaction(Base):
     token: Mapped[str | None] = mapped_column(String(20))
     amount: Mapped[str | None] = mapped_column(BaseUnits())
     decimals: Mapped[int | None] = mapped_column(Integer)
-    tx_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    tx_time: Mapped[datetime | None] = mapped_column(UTCDateTime())
     status: Mapped[str] = mapped_column(String(30))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=now)
     case: Mapped[Case] = relationship(back_populates="transactions")
 
 
@@ -118,4 +161,4 @@ class CaseAttachment(Base):
     sha256: Mapped[str] = mapped_column(String(64))
     extracted_json: Mapped[dict] = mapped_column(JSON)
     uploaded_by: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"))
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=now)

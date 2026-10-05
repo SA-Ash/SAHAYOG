@@ -6,7 +6,7 @@ COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend .
 COPY mock_services /workspace/mock_services
-RUN useradd -m engine && mkdir -p /workspace/data/uploads /workspace/data/mock && chown -R engine:engine /workspace
+RUN useradd -m engine && mkdir -p /workspace/data/uploads /workspace/data/mock /workspace/data/cache && chown -R engine:engine /workspace
 USER engine
 ENV PYTHONPATH=/workspace:/workspace/backend
 EXPOSE 8000

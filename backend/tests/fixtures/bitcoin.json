@@ -1,0 +1,26 @@
+{
+  "/tx/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+    "txid": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "status": {
+      "confirmed": true,
+      "block_time": 1759289344
+    },
+    "vin": [
+      {
+        "prevout": {
+          "scriptpubkey_address": "12ZEw5Hcv1hTb6YUQJ69y1V7uhcoDz92PH",
+          "value": 123457789,
+          "scriptpubkey_type": "p2pkh"
+        }
+      }
+    ],
+    "vout": [
+      {
+        "scriptpubkey_address": "147Us9aEq2PvBC5wobBJw1yEpQEbPKzssA",
+        "value": 123456789,
+        "scriptpubkey_type": "p2pkh"
+      }
+    ],
+    "fee": 1000
+  }
+}

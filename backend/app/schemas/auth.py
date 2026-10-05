@@ -27,4 +27,11 @@ class UserOut(BaseModel):
 
     @classmethod
     def of(cls, user):
-        return cls(id=user.id, name=user.name, email=user.email, role=user.role, org_unit=user.org_unit, totp_enabled=bool(user.totp_secret))
+        return cls(
+            id=user.id,
+            name=user.name,
+            email=user.email,
+            role=user.role,
+            org_unit=user.org_unit,
+            totp_enabled=bool(user.totp_secret),
+        )

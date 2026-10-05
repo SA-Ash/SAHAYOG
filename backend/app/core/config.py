@@ -18,6 +18,19 @@ class Settings(BaseSettings):
     sahyog_mode: str = "mock"
     sahyog_url: str = "http://localhost:8001"
     upload_dir: Path = Path("../data/uploads")
+    redis_url: str = ""
+    job_backend: str = "local"
+    replay_mode: bool = True
+    cache_dir: Path = Path("../data/cache")
+    cache_ttl_seconds: int = 300
+    etherscan_api_key: str = ""
+    etherscan_url: str = "https://api.etherscan.io"
+    tron_api_key: str = ""
+    tron_url: str = "https://api.trongrid.io"
+    bitcoin_url: str = "https://blockstream.info/api"
+    mock_vasp_url: str = "http://localhost:8002"
+    federated_timeout_seconds: float = 3
+    dev_tools_enabled: bool = True
     seed_demo: bool = False
     demo_password: str | None = None
 
@@ -29,6 +42,12 @@ class Settings(BaseSettings):
             raise ValueError("SAHYOG_MODE must be mock or real")
         if self.seed_demo and (not self.demo_password or len(self.demo_password) < 12):
             raise ValueError("Demo seeding requires DEMO_PASSWORD (12+ chars)")
+        if self.job_backend not in {"local", "celery"}:
+            raise ValueError("JOB_BACKEND must be local or celery")
+        if self.job_backend == "celery" and not self.redis_url:
+            raise ValueError("Celery requires REDIS_URL")
+        if not 0.1 <= self.federated_timeout_seconds <= 60:
+            raise ValueError("Invalid federated timeout")
         return self
 
 

@@ -7,14 +7,17 @@ from typing import Literal
 
 import httpx
 from fastapi import Depends, FastAPI, Header, Query
-from pydantic import BaseModel, Field
+from pydantic import AwareDatetime, BaseModel, Field
 from sqlalchemy import JSON, String, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 from app.core.errors import AppError, install_error_handlers
 from app.schemas.cases import Complaint
 
-engine = create_engine(os.getenv("MOCK_DATABASE_URL", "sqlite:///./mock_sahyog.db"), connect_args={"check_same_thread": False})
+engine = create_engine(
+    os.getenv("MOCK_DATABASE_URL", "sqlite:///./mock_sahyog.db"),
+    connect_args={"check_same_thread": False},
+)
 
 
 class Base(DeclarativeBase):
@@ -47,7 +50,11 @@ def db_session():
         yield db
 
 
-app = FastAPI(title="Mock SAHYOG Portal (simulated, not official API)", version="0.1.0", lifespan=lifespan)
+app = FastAPI(
+    title="Mock SAHYOG Portal (simulated, not official API)",
+    version="0.1.0",
+    lifespan=lifespan,
+)
 install_error_handlers(app)
 
 
@@ -59,15 +66,27 @@ def health():
 async def deliver(complaint: dict):
     try:
         async with httpx.AsyncClient(timeout=10) as client:
-            result = await client.post(os.getenv("BACKEND_URL", "http://localhost:8000") + "/api/v1/integrations/sahyog/webhook", json=complaint, headers={"Authorization": "Bearer " + os.environ["SAHYOG_SERVICE_TOKEN"]})
+            result = await client.post(
+                os.getenv("BACKEND_URL", "http://localhost:8000")
+                + "/api/v1/integrations/sahyog/webhook",
+                json=complaint,
+                headers={
+                    "Authorization": "Bearer " + os.environ["SAHYOG_SERVICE_TOKEN"]
+                },
+            )
             result.raise_for_status()
             return {"status": "delivered", "case_id": result.json()["id"]}
     except httpx.HTTPError:
-        return {"status": "pending_retry", "message": "Complaint is saved; use the delivery endpoint to retry"}
+        return {
+            "status": "pending_retry",
+            "message": "Complaint is saved; use the delivery endpoint to retry",
+        }
 
 
 @app.post("/sahyog/complaints", dependencies=[Depends(authenticated)], status_code=201)
-async def create_complaint(data: Complaint, notify: bool = Query(False), db: Session = Depends(db_session)):
+async def create_complaint(
+    data: Complaint, notify: bool = Query(False), db: Session = Depends(db_session)
+):
     payload = data.model_dump(mode="json")
     payload["source"] = "simulated"
     key = "complaint:" + data.ref
@@ -77,10 +96,15 @@ async def create_complaint(data: Complaint, notify: bool = Query(False), db: Ses
     if not record:
         db.add(Record(key=key, payload=payload))
         db.commit()
-    return {**payload, "delivery": await deliver(payload) if notify else {"status": "not_requested"}}
+    return {
+        **payload,
+        "delivery": await deliver(payload) if notify else {"status": "not_requested"},
+    }
 
 
-@app.post("/sahyog/complaints/{ref:path}/deliver", dependencies=[Depends(authenticated)])
+@app.post(
+    "/sahyog/complaints/{ref:path}/deliver", dependencies=[Depends(authenticated)]
+)
 async def retry_delivery(ref: str, db: Session = Depends(db_session)):
     record = db.get(Record, "complaint:" + ref)
     if not record:
@@ -88,7 +112,11 @@ async def retry_delivery(ref: str, db: Session = Depends(db_session)):
     return await deliver(record.payload)
 
 
-@app.get("/sahyog/complaints/{ref:path}", response_model=Complaint, dependencies=[Depends(authenticated)])
+@app.get(
+    "/sahyog/complaints/{ref:path}",
+    response_model=Complaint,
+    dependencies=[Depends(authenticated)],
+)
 def get_complaint(ref: str, db: Session = Depends(db_session)):
     record = db.get(Record, "complaint:" + ref)
     if not record:
@@ -102,13 +130,68 @@ class RequestInput(BaseModel):
     target_address: str = Field(min_length=10, max_length=100)
     amount_by_case: dict[str, str] = Field(default_factory=dict)
     outcome: Literal["frozen", "declined", "delayed"] = "delayed"
+    request_key: str | None = Field(default=None, max_length=100)
+    action: Literal["REQUEST", "HOLD", "RELEASE", "EXTEND"] = "REQUEST"
+    expires_at: AwareDatetime | None = None
+    target_vasp_id: str | None = None
+    issuer_target: str | None = None
+    original_request_id: uuid.UUID | None = None
 
 
 @app.post("/sahyog/requests", status_code=201, dependencies=[Depends(authenticated)])
 def create_request(data: RequestInput, db: Session = Depends(db_session)):
+    key = "request-key:" + data.request_key if data.request_key else None
+    if key:
+        existing = db.get(Record, key)
+        if existing:
+            return existing.payload
+    original = (
+        db.get(Record, "request:" + str(data.original_request_id))
+        if data.original_request_id
+        else None
+    )
+    if (
+        original
+        and original.payload.get("expires_at")
+        and datetime.now(timezone.utc)
+        >= datetime.fromisoformat(original.payload["expires_at"])
+        and original.payload["state"] in {"ACKNOWLEDGED", "FROZEN"}
+    ):
+        original.payload = {**original.payload, "state": "EXPIRED"}
+    if data.action == "EXTEND" and (
+        not original or original.payload["state"] in {"EXPIRED", "RELEASED", "DECLINED"}
+    ):
+        raise AppError("HOLD_NOT_ACTIVE", "Only an active hold can be extended", 409)
+    if original and data.action in {"RELEASE", "EXTEND"}:
+        original.payload = {
+            **original.payload,
+            **(
+                {"state": "RELEASED"}
+                if data.action == "RELEASE"
+                else {
+                    "expires_at": data.expires_at.isoformat()
+                    if data.expires_at
+                    else None
+                }
+            ),
+        }
     rid = str(uuid.uuid4())
-    payload = {"id": rid, **data.model_dump(), "state": {"frozen": "FROZEN", "declined": "DECLINED", "delayed": "ACKNOWLEDGED"}[data.outcome], "created_at": datetime.now(timezone.utc).isoformat(), "source": "simulated"}
+    payload = {
+        "id": rid,
+        **data.model_dump(mode="json"),
+        "state": {
+            "frozen": "FROZEN",
+            "declined": "DECLINED",
+            "delayed": "ACKNOWLEDGED",
+        }[data.outcome]
+        if data.action != "RELEASE"
+        else "RELEASED",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "source": "simulated",
+    }
     db.add(Record(key="request:" + rid, payload=payload))
+    if key:
+        db.add(Record(key=key, payload=payload))
     db.commit()
     return payload
 
@@ -118,4 +201,35 @@ def get_request(rid: uuid.UUID, db: Session = Depends(db_session)):
     record = db.get(Record, "request:" + str(rid))
     if not record:
         raise AppError("NOT_FOUND", "Request not found", 404)
+    deadline = record.payload.get("expires_at")
+    if (
+        deadline
+        and datetime.now(timezone.utc) >= datetime.fromisoformat(deadline)
+        and record.payload["state"] in {"ACKNOWLEDGED", "FROZEN"}
+    ):
+        record.payload = {**record.payload, "state": "EXPIRED"}
+        db.commit()
     return record.payload
+
+
+class OutcomeInput(BaseModel):
+    outcome: Literal["frozen", "declined", "delayed"]
+
+
+@app.post("/sahyog/requests/{rid}/outcome", dependencies=[Depends(authenticated)])
+def update_outcome(
+    rid: uuid.UUID, data: OutcomeInput, db: Session = Depends(db_session)
+):
+    row = db.get(Record, "request:" + str(rid))
+    if not row:
+        raise AppError("NOT_FOUND", "Request not found", 404)
+    row.payload = {
+        **row.payload,
+        "state": {
+            "frozen": "FROZEN",
+            "declined": "DECLINED",
+            "delayed": "ACKNOWLEDGED",
+        }[data.outcome],
+    }
+    db.commit()
+    return row.payload

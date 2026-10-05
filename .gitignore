@@ -11,3 +11,6 @@ dist/
 data/uploads/
 playwright-report/
 test-results/
+data/reports/
+data/cache/
+.hypothesis/

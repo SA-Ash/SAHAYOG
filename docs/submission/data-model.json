@@ -1,0 +1,3160 @@
+{
+  "users": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR(120)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "email",
+      "type": "VARCHAR(254)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "password_hash",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "role",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "totp_secret",
+      "type": "VARCHAR(64)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "pending_totp_secret",
+      "type": "VARCHAR(64)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "last_totp_step",
+      "type": "INTEGER",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "session_version",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "org_unit",
+      "type": "VARCHAR(120)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "is_active",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "cases": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_ref",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "sahyog_ref",
+      "type": "VARCHAR(80)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "title",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "gang_case_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "scenario_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "scenarios.id"
+      ]
+    },
+    {
+      "name": "created_by",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "victim_transactions": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "tx_hash",
+      "type": "VARCHAR(66)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "victim_address",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "suspect_address",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "token",
+      "type": "VARCHAR(20)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "decimals",
+      "type": "INTEGER",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "tx_time",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "case_attachments": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "file_path",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "sha256",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "extracted_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "uploaded_by",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "settings": [
+    {
+      "name": "key",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "value",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "params_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "seed",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "scenario_truth": [
+    {
+      "name": "scenario_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "scenarios.id"
+      ]
+    },
+    {
+      "name": "deposit_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "hub_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "per_case_amounts_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "untraceable_amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "truth_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "transfers": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "scenario_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "scenarios.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "tx_hash",
+      "type": "VARCHAR(66)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "log_index",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "from_addr",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "to_addr",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "token",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "token_address",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "decimals",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "block_time",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "metadata_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "address_profiles": [
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "scenario_key",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "fetched_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "api_cache": [
+    {
+      "name": "key",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "response_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "fetched_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "provider",
+      "type": "VARCHAR(60)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "jobs": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "progress",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "result_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "error_json",
+      "type": "JSON",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "finished_at",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "case_events": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "trace_runs": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "job_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "jobs.id"
+      ]
+    },
+    {
+      "name": "request_key",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "params_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "started_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "finished_at",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "stop_summary_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "entities": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "type",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "country",
+      "type": "VARCHAR(3)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "vasp_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "labels": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "scenario_key",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "confidence",
+      "type": "FLOAT",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "last_confirmed_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "decay_tau_days",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "verified_by",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "graph_nodes": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "trace_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "hop",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "role",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "cluster_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "label_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "labels.id"
+      ]
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "graph_edges": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "trace_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    },
+    {
+      "name": "from_node",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "graph_nodes.id"
+      ]
+    },
+    {
+      "name": "to_node",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "graph_nodes.id"
+      ]
+    },
+    {
+      "name": "transfer_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "transfers.id"
+      ]
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "token",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "decimals",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "block_time",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "inferred",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "pattern_findings": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "trace_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "node_ids_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "score",
+      "type": "FLOAT",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "clusters": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_from",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    }
+  ],
+  "cluster_members": [
+    {
+      "name": "cluster_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "clusters.id"
+      ]
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "attributions": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "trace_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "confidence",
+      "type": "FLOAT",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "hops",
+      "type": "INTEGER",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "candidates_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "calibration_maps": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "method",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "bins_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "fitted_on",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "probe_runs": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "deposit_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "swept_to",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "sweep_delay_s",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "run_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "mode",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "hotwallet_clusters": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "hub_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "matching_sweeps",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "first_seen",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "last_confirmed",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "vasps": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "country",
+      "type": "VARCHAR(3)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "registered_fiu",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "channel",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "endpoint",
+      "type": "VARCHAR(255)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "request_format",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "avg_response_s",
+      "type": "FLOAT",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "response_rate",
+      "type": "FLOAT",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "responsiveness_ewma",
+      "type": "FLOAT",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "attempts",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "successes",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "last_updated",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "federated_queries": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "trace_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    },
+    {
+      "name": "job_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "jobs.id"
+      ]
+    },
+    {
+      "name": "query_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "salt",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "mode",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "targets_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "sent_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "federated_replies": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "query_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "federated_queries.id"
+      ]
+    },
+    {
+      "name": "vasp_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "vasps.id"
+      ]
+    },
+    {
+      "name": "match",
+      "type": "BOOLEAN",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "received_at",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "response_s",
+      "type": "FLOAT",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "raw_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "routing_decisions": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "target_vasp_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "vasps.id"
+      ]
+    },
+    {
+      "name": "channel",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "issuer_target",
+      "type": "VARCHAR(40)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "reason_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "ranking_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "fence_members": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "added_by",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "added_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "source",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "cursor_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "fence_proposals": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "direction",
+      "type": "VARCHAR(12)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "reason_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "monitor_settings": [
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "threshold_days",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "poll_seconds",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "last_polled",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "victims_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "dormancy_state": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "last_active",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "dormant_since",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "threshold_days",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "tainted_balance_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "cursor_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "alerts": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "event_key",
+      "type": "VARCHAR(250)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "ack_by",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    }
+  ],
+  "benchmark_runs": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "dataset",
+      "type": "VARCHAR(150)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "result_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "taint_lots": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "origin_tx",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "victim_transactions.id"
+      ]
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "origin_amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "taint_runs": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "trace_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "trace_runs.id"
+      ]
+    },
+    {
+      "name": "method",
+      "type": "VARCHAR(12)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "cutoff",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "result_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "taint_balances": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "taint_runs.id"
+      ]
+    },
+    {
+      "name": "chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "token",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "token_address",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "decimals",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "method",
+      "type": "VARCHAR(12)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "as_of_time",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "gang_cases": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "name",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "gang_case_members": [
+    {
+      "name": "gang_case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "gang_cases.id"
+      ]
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    }
+  ],
+  "wallet_farms": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "funder_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "member_count",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "first_seen_window",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evidence_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "operator_fingerprints": [
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "vector_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "computed_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "case_similarity": [
+    {
+      "name": "case_a",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "case_b",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "result_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "case_collisions": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_a",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "case_b",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "hashed_cluster_id",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "room_json",
+      "type": "JSON",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "blast_radius_reports": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "taint_run_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "taint_runs.id"
+      ]
+    },
+    {
+      "name": "target_chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "target_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "traceable_amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "est_balance",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "impact_level",
+      "type": "VARCHAR(12)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "swept",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "result_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "freeze_requests": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(12)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "target_vasp_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "vasps.id"
+      ]
+    },
+    {
+      "name": "target_address",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "target_chain",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "amount_by_case_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "issuer_target",
+      "type": "VARCHAR(30)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "impact_level",
+      "type": "VARCHAR(12)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "state",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "proposer_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "approver_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "created_by",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "reason",
+      "type": "VARCHAR(2000)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "golden_hour",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "second_key_due",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "expires_at",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "sahyog_request_id",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "issuer_request_id",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "package_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "dispatch_error",
+      "type": "JSON",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "version",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "updated_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "request_events": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "request_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "freeze_requests.id"
+      ]
+    },
+    {
+      "name": "from_state",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "to_state",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "actor_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "note",
+      "type": "VARCHAR(2000)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "audit_head": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "sequence",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entry_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "audit_log": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "actor_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "action",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity",
+      "type": "VARCHAR(100)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entity_id",
+      "type": "VARCHAR(100)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "prev_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "entry_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "notifications": [
+    {
+      "name": "id",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "user_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "request_id",
+      "type": "CHAR(32)",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": [
+        "freeze_requests.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(50)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "read_at",
+      "type": "DATETIME",
+      "nullable": true,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "reports": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "version",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "bundle_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "merkle_root",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "pdf_path",
+      "type": "VARCHAR(500)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "pdf_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_by",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "users.id"
+      ]
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "bundle_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "evidence_snapshots": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "report_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "reports.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "evidence_items": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "report_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "reports.id"
+      ]
+    },
+    {
+      "name": "kind",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "leaf_hash",
+      "type": "VARCHAR(64)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "position",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "payload_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "forecast_models": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "version",
+      "type": "INTEGER",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "trained_on",
+      "type": "VARCHAR(200)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "transition_matrix_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "delay_params_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "evaluation_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "forecasts": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "model_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "forecast_models.id"
+      ]
+    },
+    {
+      "name": "result_json",
+      "type": "JSON",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "created_at",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ],
+  "gang_exit_history": [
+    {
+      "name": "id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": true,
+      "foreign_keys": []
+    },
+    {
+      "name": "gang_case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "gang_cases.id"
+      ]
+    },
+    {
+      "name": "case_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "cases.id"
+      ]
+    },
+    {
+      "name": "entity_id",
+      "type": "CHAR(32)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": [
+        "entities.id"
+      ]
+    },
+    {
+      "name": "exit_time",
+      "type": "DATETIME",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    },
+    {
+      "name": "amount",
+      "type": "NUMERIC(38, 0)",
+      "nullable": false,
+      "primary_key": false,
+      "foreign_keys": []
+    }
+  ]
+}

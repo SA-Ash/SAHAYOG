@@ -18,7 +18,16 @@ def issue_token(user, kind="session", session_jti=None):
     settings = get_settings()
     lifetime = settings.jwt_minutes if kind == "session" else settings.elevated_minutes
     now = datetime.now(timezone.utc)
-    payload = {"sub": str(user.id), "kind": kind, "ver": user.session_version, "jti": secrets.token_urlsafe(24), "iat": now, "exp": now + timedelta(minutes=lifetime), "iss": "sahyog-engine", "aud": "sahyog-ui"}
+    payload = {
+        "sub": str(user.id),
+        "kind": kind,
+        "ver": user.session_version,
+        "jti": secrets.token_urlsafe(24),
+        "iat": now,
+        "exp": now + timedelta(minutes=lifetime),
+        "iss": "sahyog-engine",
+        "aud": "sahyog-ui",
+    }
     if session_jti:
         payload["session_jti"] = session_jti
     return jwt.encode(payload, settings.jwt_secret, algorithm="HS256"), lifetime * 60
@@ -26,16 +35,33 @@ def issue_token(user, kind="session", session_jti=None):
 
 def decode_token(token, kind="session"):
     try:
-        payload = jwt.decode(token, get_settings().jwt_secret, algorithms=["HS256"], issuer="sahyog-engine", audience="sahyog-ui", options={"require": ["sub", "kind", "ver", "jti", "iat", "exp"]})
+        payload = jwt.decode(
+            token,
+            get_settings().jwt_secret,
+            algorithms=["HS256"],
+            issuer="sahyog-engine",
+            audience="sahyog-ui",
+            options={"require": ["sub", "kind", "ver", "jti", "iat", "exp"]},
+        )
         if payload["kind"] != kind:
             raise jwt.InvalidTokenError()
         return payload
     except jwt.InvalidTokenError as exc:
-        raise AppError("UNAUTHENTICATED", "Session expired or invalid; please sign in", 401) from exc
+        raise AppError(
+            "UNAUTHENTICATED", "Session expired or invalid; please sign in", 401
+        ) from exc
 
 
 def set_cookie(response: Response, name: str, value: str, max_age: int, httponly=True):
-    response.set_cookie(name, value, max_age=max_age, httponly=httponly, secure=get_settings().cookie_secure, samesite="strict", path="/")
+    response.set_cookie(
+        name,
+        value,
+        max_age=max_age,
+        httponly=httponly,
+        secure=get_settings().cookie_secure,
+        samesite="strict",
+        path="/",
+    )
 
 
 def check_csrf(request: Request):

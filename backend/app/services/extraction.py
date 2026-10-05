@@ -27,16 +27,36 @@ PATTERNS = {
 def extract_candidates(text: str, confidence: float, source: str):
     candidates = []
     for kind, pattern in PATTERNS.items():
-        for match in re.finditer(pattern, text, flags=re.IGNORECASE if kind in {"amount", "bitcoin_address"} else 0):
+        for match in re.finditer(
+            pattern, text, flags=re.IGNORECASE if kind in {"amount", "bitcoin_address"} else 0
+        ):
             value = match.group().strip()
             checksum = None
             if kind.endswith("address"):
-                chain = {"evm_address": "ethereum", "tron_address": "tron", "bitcoin_address": "bitcoin"}[kind]
+                chain = {
+                    "evm_address": "ethereum",
+                    "tron_address": "tron",
+                    "bitcoin_address": "bitcoin",
+                }[kind]
                 try:
                     _, checksum = address_info(chain, value)
                 except ValueError:
                     checksum = False
-            candidates.append({"type": kind, "value": value, "checksum_ok": checksum, "confidence": round(max(0, min(1, confidence)), 3), "source": source, "evidence": [{"signal": "qr_decode" if source == "qr" else "ocr_regex", "note": "Officer confirmation required; confidence is a heuristic, not calibrated"}]})
+            candidates.append(
+                {
+                    "type": kind,
+                    "value": value,
+                    "checksum_ok": checksum,
+                    "confidence": round(max(0, min(1, confidence)), 3),
+                    "source": source,
+                    "evidence": [
+                        {
+                            "signal": "qr_decode" if source == "qr" else "ocr_regex",
+                            "note": "Officer confirmation required; confidence is a heuristic, not calibrated",
+                        }
+                    ],
+                }
+            )
     return candidates
 
 
@@ -53,36 +73,57 @@ def extract_image(raw: bytes):
                 raise AppError("IMAGE_TOO_LARGE", "Image exceeds the 12 megapixel limit", 413)
             image.load()
             image = image.convert("RGB")
-    except (UnidentifiedImageError, OSError, Image.DecompressionBombError, Image.DecompressionBombWarning) as exc:
+    except (
+        UnidentifiedImageError,
+        OSError,
+        Image.DecompressionBombError,
+        Image.DecompressionBombWarning,
+    ) as exc:
         raise AppError("INVALID_IMAGE", "Image is corrupt or too large", 422) from exc
     import cv2
     import numpy as np
     import pytesseract
 
     grayscale = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
-    threshold = cv2.adaptiveThreshold(grayscale, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 11)
+    threshold = cv2.adaptiveThreshold(
+        grayscale, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 11
+    )
     candidates, notices = [], []
     try:
-        words = pytesseract.image_to_data(threshold, config="--psm 6", output_type=pytesseract.Output.DICT, timeout=15)
+        words = pytesseract.image_to_data(
+            threshold, config="--psm 6", output_type=pytesseract.Output.DICT, timeout=15
+        )
         lines = {}
         for i, word in enumerate(words["text"]):
             if word.strip():
                 key = (words["block_num"][i], words["par_num"][i], words["line_num"][i])
                 lines.setdefault(key, []).append((word, max(0, float(words["conf"][i])) / 100))
         for line in lines.values():
-            candidates.extend(extract_candidates(" ".join(w for w, _ in line), sum(c for _, c in line) / len(line), "ocr"))
+            candidates.extend(
+                extract_candidates(
+                    " ".join(w for w, _ in line), sum(c for _, c in line) / len(line), "ocr"
+                )
+            )
     except (pytesseract.TesseractNotFoundError, RuntimeError):
         notices.append("OCR unavailable or timed out; install Tesseract or retry a clearer image")
     try:
         from pyzbar.pyzbar import decode
+
         for symbol in decode(image):
-            candidates.extend(extract_candidates(symbol.data.decode("utf-8", errors="replace"), 1.0, "qr"))
+            candidates.extend(
+                extract_candidates(symbol.data.decode("utf-8", errors="replace"), 1.0, "qr")
+            )
     except (ImportError, OSError):
         notices.append("QR decoding unavailable; install the libzbar system library")
     unique = {}
     for item in sorted(candidates, key=lambda c: c["confidence"], reverse=True):
         unique.setdefault((item["type"], item["value"]), item)
-    result = {"candidates": list(unique.values()), "notices": notices, "review_required": True, "source": "image_extraction"}
+    result = {
+        "candidates": list(unique.values()),
+        "notices": notices,
+        "review_required": True,
+        "source": "image_extraction",
+    }
     # Strip metadata and re-encode instead of preserving untrusted uploaded bytes.
     output = io.BytesIO()
     image.save(output, format="PNG")
@@ -97,12 +138,25 @@ def stage_image(db, user, raw):
     path = directory / f"{attachment_id}.png"
     path.write_bytes(sanitized)
     path.chmod(0o600)
-    row = CaseAttachment(id=attachment_id, file_path=path.name, sha256=hashlib.sha256(raw).hexdigest(), extracted_json=result, uploaded_by=user.id)
+    # The digest must verify the actual stored, downloadable evidence file.
+    result["original_sha256"] = hashlib.sha256(raw).hexdigest()
+    row = CaseAttachment(
+        id=attachment_id,
+        file_path=path.name,
+        sha256=hashlib.sha256(sanitized).hexdigest(),
+        extracted_json=result,
+        uploaded_by=user.id,
+    )
     db.add(row)
     try:
         db.commit()
     except Exception:
         path.unlink(missing_ok=True)
         raise
-    audit(user.id, "case.image_extracted", {"attachment_id": str(attachment_id), "sha256": row.sha256})
+    audit(
+        user.id,
+        "case.image_extracted",
+        {"attachment_id": str(attachment_id), "sha256": row.sha256},
+        db=db,
+    )
     return {"attachment_id": attachment_id, "sha256": row.sha256, **result}

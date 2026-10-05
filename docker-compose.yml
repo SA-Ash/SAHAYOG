@@ -26,6 +26,12 @@ services:
     environment:
       DATABASE_URL: postgresql+psycopg://sahyog:${POSTGRES_PASSWORD}@postgres:5432/sahyog
       REDIS_URL: redis://redis:6379/0
+      JOB_BACKEND: celery
+      REPLAY_MODE: ${REPLAY_MODE:-true}
+      CACHE_DIR: /workspace/data/cache
+      MOCK_VASP_URL: http://mock-vasps:8002
+      ETHERSCAN_API_KEY: ${ETHERSCAN_API_KEY:-}
+      TRON_API_KEY: ${TRON_API_KEY:-}
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
       SAHYOG_SERVICE_TOKEN: ${SAHYOG_SERVICE_TOKEN:?Set SAHYOG_SERVICE_TOKEN in .env}
       DEMO_PASSWORD: ${DEMO_PASSWORD:?Set DEMO_PASSWORD in .env}
@@ -36,6 +42,8 @@ services:
       UPLOAD_DIR: /workspace/data/uploads
     volumes:
       - uploads:/workspace/data/uploads
+      - reports:/workspace/data/reports
+      - chain_cache:/workspace/data/cache
     ports:
       - "127.0.0.1:8000:8000"
     depends_on:
@@ -44,6 +52,8 @@ services:
       redis:
         condition: service_healthy
       mock-sahyog:
+        condition: service_healthy
+      mock-vasps:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
@@ -68,6 +78,62 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["celery", "-A", "app.workers.tasks:celery", "worker", "--loglevel=info", "--concurrency=2"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://sahyog:${POSTGRES_PASSWORD}@postgres:5432/sahyog
+      REDIS_URL: redis://redis:6379/0
+      JOB_BACKEND: celery
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      SAHYOG_SERVICE_TOKEN: ${SAHYOG_SERVICE_TOKEN:?Set SAHYOG_SERVICE_TOKEN in .env}
+      REPLAY_MODE: ${REPLAY_MODE:-true}
+      CACHE_DIR: /workspace/data/cache
+      SAHYOG_URL: http://mock-sahyog:8001
+      MOCK_VASP_URL: http://mock-vasps:8002
+      ETHERSCAN_API_KEY: ${ETHERSCAN_API_KEY:-}
+      TRON_API_KEY: ${TRON_API_KEY:-}
+    volumes:
+      - chain_cache:/workspace/data/cache
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+  beat:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["celery", "-A", "app.workers.tasks:celery", "beat", "--loglevel=info", "--schedule=/tmp/celerybeat-schedule"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://sahyog:${POSTGRES_PASSWORD}@postgres:5432/sahyog
+      REDIS_URL: redis://redis:6379/0
+      JOB_BACKEND: celery
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      SAHYOG_SERVICE_TOKEN: ${SAHYOG_SERVICE_TOKEN:?Set SAHYOG_SERVICE_TOKEN in .env}
+      SAHYOG_URL: http://mock-sahyog:8001
+    depends_on:
+      backend:
+        condition: service_healthy
+  mock-vasps:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: ["uvicorn", "mock_services.vasps.main:app", "--host", "0.0.0.0", "--port", "8002"]
+    environment:
+      SAHYOG_SERVICE_TOKEN: ${SAHYOG_SERVICE_TOKEN:?Set SAHYOG_SERVICE_TOKEN in .env}
+      VASP_DATABASE_URL: sqlite:////workspace/data/mock/vasps.db
+    volumes:
+      - mock_data:/workspace/data/mock
+    ports:
+      - "127.0.0.1:8002:8002"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
   frontend:
     build: ./frontend
     ports:
@@ -79,3 +145,5 @@ volumes:
   postgres_data:
   uploads:
   mock_data:
+  chain_cache:
+  reports:
